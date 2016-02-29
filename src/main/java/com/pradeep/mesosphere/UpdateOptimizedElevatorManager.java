@@ -36,35 +36,33 @@ public class UpdateOptimizedElevatorManager implements ElevatorManager {
      */
     @Override
     public void requestPickup(int floor, int direction) {
-        // Pick an elevator at rest
-        for (Elevator elevator : elevators) {
-            if (elevator.getDirection() == 0) {
-                elevator.getRequests().offer(floor);
-                // Note this will control the direction of the elevator;
-                elevator.setDirection((elevator.getCurrentFloor() < floor ? 1 : -1));
-                return;
-            }
-        }
-        // Pick an elevator in the same direction
+        Elevator minElevator = null;
+        int minDiff = Integer.MAX_VALUE;
         for (Elevator elevator : elevators) {
             if (elevator.getDirection() == direction) {
                 if ((direction == -1 && floor < elevator.getCurrentFloor()) &&
                         (direction == 1 && floor > elevator.getCurrentFloor())) {
-                    elevator.getRequests().offer(floor);
-                    return;
+                    int floorDiff = Math.abs(floor - elevator.getCurrentFloor());
+                    if (floorDiff < minDiff) {
+                        minDiff = floorDiff;
+                        minElevator = elevator;
+                    }
                 }
             }
         }
 
-        // Pick an elevator with least load
-        Elevator minElevator = elevators.get(0);
-        for (Elevator elevator : elevators) {
-            if (elevator.getRequests().size() < minElevator.getRequests().size()) {
-                minElevator = elevator;
+        // All elevators are at rest, direction = 0
+        if (minElevator == null) {
+            // Pick an elevator with least load
+            minElevator = elevators.get(0);
+            for (Elevator elevator : elevators) {
+                if (elevator.getRequests().size() < minElevator.getRequests().size()) {
+                    minElevator = elevator;
+                }
             }
+            // add request
+            minElevator.getRequests().offer(floor);
         }
-        // add request
-        minElevator.getRequests().offer(floor);
     }
 
     /**

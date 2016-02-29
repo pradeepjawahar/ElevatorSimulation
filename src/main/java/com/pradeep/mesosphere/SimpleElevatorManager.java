@@ -42,16 +42,7 @@ public class SimpleElevatorManager implements ElevatorManager {
                 return;
             }
         }
-        // Pick an elevator in the same direction
-        for (Elevator elevator : elevators) {
-            if (elevator.getDirection() == direction) {
-                if ((direction == -1 && floor < elevator.getCurrentFloor()) &&
-                        (direction == 1 && floor > elevator.getCurrentFloor())) {
-                    elevator.getRequests().offer(floor);
-                    return;
-                }
-            }
-        }
+
         // Pick an elevator with least load
         Elevator minElevator = elevators.get(0);
         for (Elevator elevator : elevators) {
