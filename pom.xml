@@ -45,7 +45,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.groupon.mesosphere.Driver</mainClass>
+                                    <mainClass>com.pradeep.mesosphere.Driver</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
