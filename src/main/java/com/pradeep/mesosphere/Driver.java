@@ -7,7 +7,7 @@ public class Driver {
     private static final String QUIT_PROGRAM = "quit";
     private static final int MAX_ELEVATORS = 16;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         if (args.length < 1) {
             System.out.println("Required parameter elevator manager type missing.");
