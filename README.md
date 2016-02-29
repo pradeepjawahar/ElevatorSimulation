@@ -85,15 +85,15 @@ This solution is very simple though not optimal as the elevator goes up and down
 * GoTo - The person is in the elevator and hence the destination floor is just added to the request queue.
 
 ### PickUp Optimized Elevator Manager
-* Pickup - Requests are added to a particular elevators queue if the elevator is going in the same direction and at a distance least from the pickup floor. The currentFloor and currentDirection plays an important part in which elevator the floor goes to. Care is taken to ensure that the request is greater or less depending on the direction. E.g if request for going up from 5 th floor and there is an elevator at floor 6 and floor 4 going up the elevator at floor 4 will be chosen. Similarly for going down. If such a direction cannot be found the elevator manager falls back to picking an elevator with least load.
+* Pickup - Requests are added to a particular elevators queue if the elevator is going in the same direction and at a distance least from the pickup floor. The currentFloor and currentDirection play an important part in which elevator the new pickup request goes to. Care is taken to ensure that the request floor is greater or less depending on the direction of the elevator. E.g if there is a request for going up from 5 th floor and there are elevators at floor 6 and floor 4 going up, the elevator at floor 4 will be chosen. Similarly for going down. If such a direction cannot be found the elevator manager falls back to picking an elevator with least load.
 * Step - Same as above (Simple elevator manager)
-With this solution there is a high probability that elements in the same direction can be grouped together. The only down side with this solution is that if the elevator is destined to go to floor and there is a pickup at floor 6 the elevator will skip. This lead to my next to my next solution.
+With this solution there is a high probability that elements in the same direction can be grouped together. The only down side with this solution is that if the elevator currently going upto floor 8 and there is a pickup at floor 6(in the queue) the elevator will skip 6. This lead to my next solution.
 
 ### Update Optimized  Elevator Manager
 * Pickup - Same as above(Pickup Optimized Elevator Manager)
-* Step - After every step operation the queue is traversed to check if there is any request for the current floor. If found the entry is erased (i.e. it’s fulfilled). If there any more entries in the queue it’s verified if the direction needs to be changed. If there is atlas one entry in the current direction it’s served. If there is none in the current direction the direction is reversed and other requests are served.
+* Step - After every step operation the queue is traversed to check if there is any request for the current floor. If found the entry is erased (i.e. it’s fulfilled). If there any more entries in the queue it’s verified if the direction needs to be changed. If there is at least one entry in the current direction it’s served. If there is none in the current direction the direction is reversed and other requests are served.
 This solution may lead to starvation if there is at least one new pick up in the current direction the requests in the other direction may not be served. With the pickup also being optimized in this solution such cases can be minimized. Or the pick up could be made much more smarter in a way similar to a cache avoiding hotspots.
-Also this solution can use a fast sorted lookup data structure which I did not have time to implement.
+Also this solution can use a fast sorted lookup data structure which I did not have time to implement for checking if there is request in the queue for the current floor.
 
 ## Alternate Solutions 
 
