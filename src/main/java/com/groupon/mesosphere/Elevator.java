@@ -48,29 +48,6 @@ public class Elevator {
         return sbStatus.toString();
     }
 
-//    public void updateState() {
-//
-//        // Mark previous request completed if done.
-//        if (currentFloor == currentDestinationFloor) {
-//            direction = 0;
-//        }
-//
-//        if (requests.size() > 0 && direction == 0) {
-//            currentDestinationFloor = requests.poll();
-//            // The next request could be to the current floor.
-//            if (currentFloor == currentDestinationFloor) {
-//                direction = 0;
-//            } else {
-//                direction = (currentFloor < currentDestinationFloor) ? 1 : -1;
-//            }
-//        }
-//
-//        // Update the floor only if requests not completed
-//        if (!requestsCompleted()) {
-//            currentFloor += direction;
-//        }
-//    }
-
     /**
      * Checks if all the requests in the queue have been completed.
      * @return true -> requests completed, false -> more to complete.
