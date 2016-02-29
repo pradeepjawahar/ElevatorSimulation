@@ -1,13 +1,13 @@
-package com.groupon.mesosphere;
+package com.pradeep.mesosphere;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PickupOptimizedElevatorManager implements ElevatorManager {
+public class SimpleElevatorManager implements ElevatorManager {
 
     private List<Elevator> elevators;
 
-    public PickupOptimizedElevatorManager(int numElevators) {
+    public SimpleElevatorManager(int numElevators) {
         elevators = new ArrayList<Elevator>(numElevators);
         for (int i = 0; i < numElevators; i++) {
             elevators.add(new Elevator(i));
@@ -35,34 +35,32 @@ public class PickupOptimizedElevatorManager implements ElevatorManager {
      */
     @Override
     public void requestPickup(int floor, int direction) {
-        // Get an elevator traveling in the same direction and is the closest to the destination floor
-        Elevator minElevator = null;
-        int minDiff = Integer.MAX_VALUE;
+        // Pick an elevator at rest
+        for (Elevator elevator : elevators) {
+            if (elevator.getDirection() == 0) {
+                elevator.getRequests().offer(floor);
+                return;
+            }
+        }
+        // Pick an elevator in the same direction
         for (Elevator elevator : elevators) {
             if (elevator.getDirection() == direction) {
                 if ((direction == -1 && floor < elevator.getCurrentFloor()) &&
                         (direction == 1 && floor > elevator.getCurrentFloor())) {
-                    int floorDiff = Math.abs(floor - elevator.getCurrentFloor());
-                    if (floorDiff < minDiff) {
-                        minDiff = floorDiff;
-                        minElevator = elevator;
-                    }
+                    elevator.getRequests().offer(floor);
+                    return;
                 }
             }
         }
-
-        // All elevators are at rest, direction = 0
-        if (minElevator == null) {
-            // Pick an elevator with least load
-            minElevator = elevators.get(0);
-            for (Elevator elevator : elevators) {
-                if (elevator.getRequests().size() < minElevator.getRequests().size()) {
-                    minElevator = elevator;
-                }
+        // Pick an elevator with least load
+        Elevator minElevator = elevators.get(0);
+        for (Elevator elevator : elevators) {
+            if (elevator.getRequests().size() < minElevator.getRequests().size()) {
+                minElevator = elevator;
             }
-            // add request
-            minElevator.getRequests().offer(floor);
         }
+        // add request
+        minElevator.getRequests().offer(floor);
     }
 
     /**
